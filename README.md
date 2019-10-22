@@ -27,11 +27,12 @@ yarn start;
 - [x] Limit/offset-based pagination
 - [x] Mutations
 - [x] Enums
-- [ ] Custom scalars
+- [x] Custom scalars
 - [ ] Unions
 - [ ] Subscriptions
 
 ## Misc TODO
 
 - [ ] Tests?
-- [ ] Autoexport generated .graphql schema file on commit
+- [x] Autoexport generated .graphql schema file on commit
+- [ ] Package and publish runnable artifact to NPM (https://github.com/zeit/ncc ?)

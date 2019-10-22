@@ -13,11 +13,14 @@
   "dependencies": {
     "apollo-server": "^2.9.6",
     "graphql": "^14.5.8",
+    "graphql-iso-date": "^3.6.1",
     "graphql-relay": "^0.6.0",
     "typescript": "^3.6.4"
   },
   "devDependencies": {
+    "@types/graphql-iso-date": "^3.3.3",
     "@types/graphql-relay": "^0.4.11",
-    "@types/node": "^12.11.1"
+    "@types/node": "^12.11.1",
+    "husky": "^3.0.9"
   }
 }

@@ -9,6 +9,8 @@ import {
   GraphQLID
 } from "graphql";
 
+import { GraphQLDateTime } from "graphql-iso-date";
+
 import {
   fromGlobalId,
   globalIdField,
@@ -99,7 +101,8 @@ export let ticketType: GraphQLObjectType = new GraphQLObjectType({
     status: { type: new GraphQLNonNull(ticketStatusEnum) },
     subject: { type: new GraphQLNonNull(GraphQLString) },
     lastUpdated: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: GraphQLDateTime,
+      resolve: obj => (obj.lastUpdated ? new Date(obj.lastUpdated) : null)
     },
     trackingId: { type: new GraphQLNonNull(GraphQLString) }
   }),
