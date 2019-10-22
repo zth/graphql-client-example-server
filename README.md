@@ -2,20 +2,32 @@
 
 A simple GraphQL server for powering examples of various GraphQL clients in various languages.
 
-## Running
+## Installation
+
+You can install and run the server without needing to clone this repo by doing:
 
 ```
-// You can provide the PORT env-variable to control what port the server runs on (default 4000).
-yarn start;
+npm install -g graphql-client-example-server
 ```
+
+...and then simply running with `graphql-client-example-server`.
 
 ## Developing
 
+### Running
+
 ```
-yarn && yarn build --watch;
+// You can provide the PORT env-variable to control what port the server runs on (default 4000).
+yarn start
+```
+
+### Building
+
+```
+yarn && yarn build --watch
 
 // In a separate terminal
-yarn start;
+yarn start
 ```
 
 ## Features to cover
