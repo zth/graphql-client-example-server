@@ -20,6 +20,7 @@ import {
 } from "./graphqlTypes";
 
 import { mutationType } from "./mutations";
+import { subscriptionType } from "./subscriptions";
 
 let queryType = new GraphQLObjectType({
   name: "Query",
@@ -70,5 +71,6 @@ let queryType = new GraphQLObjectType({
 
 export let schema = new GraphQLSchema({
   query: queryType,
-  mutation: mutationType
+  mutation: mutationType,
+  subscription: subscriptionType
 });

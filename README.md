@@ -29,7 +29,7 @@ yarn start;
 - [x] Enums
 - [x] Custom scalars
 - [ ] Unions
-- [ ] Subscriptions
+- [x] Subscriptions
 
 ## Misc TODO
 
