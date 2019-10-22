@@ -72,6 +72,10 @@ type SiteStatistics implements Node {
   currentVisitorsOnline: Int!
 }
 
+type Subscription {
+  siteStatisticsUpdated: SiteStatistics
+}
+
 type Ticket implements Node {
   """The ID of an object"""
   id: ID!
