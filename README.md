@@ -22,8 +22,12 @@ yarn start;
 
 - [x] Node interface (for Relay)
 - [x] Connection-based pagination
-- [ ] Limit/offset-based pagination
+- [x] Limit/offset-based pagination
 - [x] Mutations
 - [x] Enums
 - [ ] Unions
 - [ ] Subscriptions
+
+## Misc TODO
+
+- [ ] Tests?

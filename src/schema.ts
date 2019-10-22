@@ -1,4 +1,10 @@
-import { GraphQLSchema, GraphQLObjectType, GraphQLNonNull } from "graphql";
+import {
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLNonNull,
+  GraphQLList,
+  GraphQLInt
+} from "graphql";
 
 import { connectionArgs, connectionFromArray } from "graphql-relay";
 
@@ -9,7 +15,8 @@ import {
   ticketStatusEnum,
   ticketConnection,
   todoConnection,
-  nodeField
+  nodeField,
+  todoItemType
 } from "./graphqlTypes";
 
 import { mutationType } from "./mutations";
@@ -34,11 +41,28 @@ let queryType = new GraphQLObjectType({
         );
       }
     },
-    todos: {
+    todosConnection: {
       type: new GraphQLNonNull(todoConnection.connectionType),
       args: connectionArgs,
       resolve(root, args, obj) {
         return connectionFromArray(todoItems, args);
+      }
+    },
+    todos: {
+      type: new GraphQLNonNull(new GraphQLList(todoItemType)),
+      args: {
+        limit: {
+          type: new GraphQLNonNull(GraphQLInt)
+        },
+        offset: {
+          type: new GraphQLNonNull(GraphQLInt)
+        }
+      },
+      resolve(root, args, obj) {
+        return todoItems.slice(
+          parseInt(args.offset, 10),
+          parseInt(args.limit, 10)
+        );
       }
     }
   })
