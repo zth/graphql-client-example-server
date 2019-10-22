@@ -2,11 +2,15 @@
   "name": "graphql-client-example-server",
   "version": "1.0.0",
   "description": "A simple GraphQL server for powering examples of various GraphQL clients in various languages.",
-  "main": "dist/index.js",
+  "main": "bin/index.js",
   "repository": "https://github.com/zth/graphql-client-example-server",
   "author": "Gabriel Nordeborn",
   "license": "MIT",
+  "bin": {
+    "graphql-client-example-server": "bin/index.js"
+  },
   "scripts": {
+    "build-artifact": "ncc build src/index.ts -o out/bin",
     "build": "yarn tsc",
     "generate-schema": "yarn build && node dist/scripts/generateSchemaGraphQLFile.js",
     "start": "yarn build && node dist/index.js"
@@ -27,6 +31,7 @@
     "@types/graphql-iso-date": "^3.3.3",
     "@types/graphql-relay": "^0.4.11",
     "@types/node": "^12.11.1",
+    "@zeit/ncc": "^0.20.5",
     "husky": "^3.0.9"
   }
 }

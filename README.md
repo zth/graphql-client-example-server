@@ -35,4 +35,4 @@ yarn start;
 
 - [ ] Tests?
 - [x] Autoexport generated .graphql schema file on commit
-- [ ] Package and publish runnable artifact to NPM (https://github.com/zeit/ncc ?)
+- [x] Package and publish runnable artifact to NPM (https://github.com/zeit/ncc ?)
