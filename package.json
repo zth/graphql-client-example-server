@@ -1,0 +1,24 @@
+{
+  "name": "graphql-client-example-server",
+  "version": "1.0.0",
+  "description": "A simple GraphQL server for powering examples of various GraphQL clients in various languages.",
+  "main": "dist/index.js",
+  "repository": "https://github.com/zth/graphql-client-example-server",
+  "author": "Gabriel Nordeborn",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc",
+    "build:watch": "yarn tsc",
+    "start": "yarn build && node dist/index.js"
+  },
+  "dependencies": {
+    "apollo-server": "^2.9.6",
+    "graphql": "^14.5.8",
+    "graphql-relay": "^0.6.0",
+    "typescript": "^3.6.4"
+  },
+  "devDependencies": {
+    "@types/graphql-relay": "^0.4.11",
+    "@types/node": "^12.11.1"
+  }
+}
