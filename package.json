@@ -8,7 +8,6 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn tsc",
-    "build:watch": "yarn tsc",
     "start": "yarn build && node dist/index.js"
   },
   "dependencies": {

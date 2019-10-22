@@ -5,7 +5,8 @@ import {
   GraphQLFloat,
   GraphQLInt,
   GraphQLBoolean,
-  GraphQLEnumType
+  GraphQLEnumType,
+  GraphQLID
 } from "graphql";
 
 import {
@@ -51,6 +52,10 @@ export let userType: GraphQLObjectType = new GraphQLObjectType({
   name: "User",
   fields: () => ({
     id: globalIdField(),
+    dbId: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: obj => obj.id
+    },
     avatarUrl: { type: GraphQLString },
     fullName: { type: new GraphQLNonNull(GraphQLString) }
   }),
@@ -82,6 +87,10 @@ export let ticketType: GraphQLObjectType = new GraphQLObjectType({
   name: "Ticket",
   fields: () => ({
     id: globalIdField(),
+    dbId: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: obj => obj.id
+    },
     assignee: {
       type: userType,
       resolve: obj =>
@@ -103,6 +112,10 @@ export let todoItemType: GraphQLObjectType = new GraphQLObjectType({
   name: "TodoItem",
   fields: () => ({
     id: globalIdField(),
+    dbId: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: obj => obj.id
+    },
     completed: { type: GraphQLBoolean },
     text: { type: new GraphQLNonNull(GraphQLString) }
   }),

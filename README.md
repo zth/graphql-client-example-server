@@ -12,7 +12,7 @@ yarn start;
 ## Developing
 
 ```
-yarn && yarn build:watch;
+yarn && yarn build --watch;
 
 // In a separate terminal
 yarn start;
@@ -21,13 +21,17 @@ yarn start;
 ## Features to cover
 
 - [x] Node interface (for Relay)
+- [x] Globally unique IDs
+- [x] Database IDs
 - [x] Connection-based pagination
 - [x] Limit/offset-based pagination
 - [x] Mutations
 - [x] Enums
+- [ ] Custom scalars
 - [ ] Unions
 - [ ] Subscriptions
 
 ## Misc TODO
 
 - [ ] Tests?
+- [ ] Autoexport generated .graphql schema file on commit
