@@ -1,4 +1,4 @@
-import { User, SiteStatistics, Ticket, TodoItem } from "./types";
+import { User, SiteStatistics, Ticket, TodoItem, WorkingGroup } from "./types";
 
 export let users: User[] = [
   {
@@ -27,6 +27,21 @@ export let users: User[] = [
   }
 ];
 
+export let workingGroups: WorkingGroup[] = [
+  {
+    type: "WorkingGroup",
+    id: 1,
+    name: "Customer Support #1",
+    memberIds: [1, 2]
+  },
+  {
+    type: "WorkingGroup",
+    id: 2,
+    name: "Customer Support #2",
+    memberIds: [3]
+  }
+];
+
 export let siteStatistics: SiteStatistics = {
   type: "SiteStatistics",
   id: 1,
@@ -39,8 +54,8 @@ export let tickets: Ticket[] = [
   {
     type: "Ticket",
     id: 1,
-    assigneeId: 1,
-    subject: "Fund is not recieved",
+    assignee: { type: "User", id: 1 },
+    subject: "Funds not received",
     status: "Done",
     lastUpdated: new Date(2019, 9, 10).toJSON(),
     trackingId: "WD-12345"
@@ -48,7 +63,7 @@ export let tickets: Ticket[] = [
   {
     type: "Ticket",
     id: 2,
-    assigneeId: 2,
+    assignee: { type: "WorkingGroup", id: 1 },
     subject: "High loading time",
     status: "Progress",
     lastUpdated: new Date(2019, 9, 11).toJSON(),
@@ -57,7 +72,7 @@ export let tickets: Ticket[] = [
   {
     type: "Ticket",
     id: 3,
-    assigneeId: null,
+    assignee: null,
     subject: "Website down for one week",
     status: "OnHold",
     lastUpdated: new Date(2019, 9, 12).toJSON(),
@@ -66,7 +81,7 @@ export let tickets: Ticket[] = [
   {
     type: "Ticket",
     id: 4,
-    assigneeId: 3,
+    assignee: { type: "User", id: 3 },
     subject: "Loosing control on server	",
     status: "Rejected",
     lastUpdated: new Date(2019, 9, 15).toJSON(),
@@ -75,7 +90,7 @@ export let tickets: Ticket[] = [
   {
     type: "Ticket",
     id: 5,
-    assigneeId: 4,
+    assignee: { type: "User", id: 4 },
     subject: "Website slow",
     status: "OnHold",
     lastUpdated: new Date(2019, 9, 17).toJSON(),

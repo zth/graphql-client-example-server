@@ -13,12 +13,23 @@ export type User = {
   fullName: string;
 };
 
+export type WorkingGroup = {
+  type: "WorkingGroup";
+  id: number;
+  name: string;
+  memberIds: number[];
+};
+
+type AssigneeUnion =
+  | { type: "User"; id: number }
+  | { type: "WorkingGroup"; id: number };
+
 export type TicketStatus = "Done" | "Progress" | "OnHold" | "Rejected";
 
 export type Ticket = {
   type: "Ticket";
   id: number;
-  assigneeId: number | null;
+  assignee: AssigneeUnion | null;
   subject: string;
   status: TicketStatus;
   lastUpdated: string;

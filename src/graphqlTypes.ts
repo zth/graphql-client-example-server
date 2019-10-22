@@ -6,7 +6,9 @@ import {
   GraphQLInt,
   GraphQLBoolean,
   GraphQLEnumType,
-  GraphQLID
+  GraphQLID,
+  GraphQLUnionType,
+  GraphQLList
 } from "graphql";
 
 import { GraphQLDateTime } from "graphql-iso-date";
@@ -15,10 +17,11 @@ import {
   fromGlobalId,
   globalIdField,
   nodeDefinitions,
-  connectionDefinitions
+  connectionDefinitions,
+  connectionFromArray
 } from "graphql-relay";
 
-import { users } from "./db";
+import { users, workingGroups } from "./db";
 
 // @ts-ignore
 export let { nodeInterface, nodeField } = nodeDefinitions(
@@ -40,6 +43,8 @@ export let { nodeInterface, nodeField } = nodeDefinitions(
     switch (obj.type) {
       case "User":
         return userType;
+      case "WorkingGroup":
+        return workingGroupType;
       case "SiteStatistics":
         return siteStatisticsType;
       case "Ticket":
@@ -62,6 +67,61 @@ export let userType: GraphQLObjectType = new GraphQLObjectType({
     fullName: { type: new GraphQLNonNull(GraphQLString) }
   }),
   interfaces: [nodeInterface]
+});
+
+export let userConnection = connectionDefinitions({ nodeType: userType });
+
+export let workingGroupType: GraphQLObjectType = new GraphQLObjectType({
+  name: "WorkingGroup",
+  fields: () => ({
+    id: globalIdField(),
+    dbId: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: obj => obj.id
+    },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    membersConnection: {
+      type: userConnection.connectionType,
+      resolve(obj, args) {
+        return connectionFromArray(
+          obj.memberIds
+            .map((id: number) => users.find(u => u.id === id))
+            .filter(Boolean),
+          args
+        );
+      }
+    },
+    members: {
+      args: {
+        limit: {
+          type: new GraphQLNonNull(GraphQLInt)
+        },
+        offset: {
+          type: new GraphQLNonNull(GraphQLInt)
+        }
+      },
+      type: new GraphQLList(userType),
+      resolve(obj, args) {
+        return obj.memberIds
+          .map((id: number) => users.find(u => u.id === id))
+          .filter(Boolean)
+          .slice(parseInt(args.offset, 10), parseInt(args.limit, 10));
+      }
+    }
+  }),
+  interfaces: [nodeInterface]
+});
+
+export let assigneeUnionType = new GraphQLUnionType({
+  name: "AssigneeType",
+  types: [userType, workingGroupType],
+  resolveType(value) {
+    if (value.type === "User") {
+      return userType;
+    } else if (value.type === "WorkingGroup") {
+      return workingGroupType;
+    }
+  }
 });
 
 export let siteStatisticsType: GraphQLObjectType = new GraphQLObjectType({
@@ -94,9 +154,21 @@ export let ticketType: GraphQLObjectType = new GraphQLObjectType({
       resolve: obj => obj.id
     },
     assignee: {
-      type: userType,
-      resolve: obj =>
-        obj.assigneeId != null ? users.find(u => u.id === obj.assigneeId) : null
+      type: assigneeUnionType,
+      resolve: obj => {
+        if (obj.assignee == null) {
+          return null;
+        }
+
+        switch (obj.assignee.type) {
+          case "User":
+            return users.find(u => u.id === obj.assignee.id);
+          case "WorkingGroup":
+            return workingGroups.find(wg => wg.id === obj.assignee.id);
+          default:
+            return null;
+        }
+      }
     },
     status: { type: new GraphQLNonNull(ticketStatusEnum) },
     subject: { type: new GraphQLNonNull(GraphQLString) },

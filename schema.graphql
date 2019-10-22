@@ -8,6 +8,8 @@ type AddTodoItemPayload {
   clientMutationId: String
 }
 
+union AssigneeType = User | WorkingGroup
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
 `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO
@@ -80,7 +82,7 @@ type Ticket implements Node {
   """The ID of an object"""
   id: ID!
   dbId: ID!
-  assignee: User
+  assignee: AssigneeType
   status: TicketStatus!
   subject: String!
   lastUpdated: DateTime
@@ -156,4 +158,31 @@ type User implements Node {
   dbId: ID!
   avatarUrl: String
   fullName: String!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge"""
+  node: User
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type WorkingGroup implements Node {
+  """The ID of an object"""
+  id: ID!
+  dbId: ID!
+  name: String!
+  membersConnection: UserConnection
+  members(limit: Int!, offset: Int!): [User]
 }
