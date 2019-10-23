@@ -16,7 +16,8 @@ import {
   ticketConnection,
   todoConnection,
   nodeField,
-  todoItemType
+  todoItemType,
+  ticketType
 } from "./graphqlTypes";
 
 import { mutationType } from "./mutations";
@@ -30,7 +31,7 @@ let queryType = new GraphQLObjectType({
       type: new GraphQLNonNull(siteStatisticsType),
       resolve: () => siteStatistics
     },
-    tickets: {
+    ticketsConnection: {
       type: new GraphQLNonNull(ticketConnection.connectionType),
       args: { status: { type: ticketStatusEnum }, ...connectionArgs },
       resolve(root, args, obj) {
@@ -39,6 +40,28 @@ let queryType = new GraphQLObjectType({
             args.status ? ticket.status === args.status : true
           ),
           args
+        );
+      }
+    },
+    tickets: {
+      type: new GraphQLNonNull(new GraphQLList(ticketType)),
+      args: {
+        status: { type: ticketStatusEnum },
+        limit: {
+          type: new GraphQLNonNull(GraphQLInt)
+        },
+        offset: {
+          type: new GraphQLNonNull(GraphQLInt)
+        }
+      },
+      resolve(root, args, obj) {
+        const ticketsByStatus = tickets.filter(ticket =>
+          args.status ? ticket.status === args.status : true
+        );
+
+        return ticketsByStatus.slice(
+          parseInt(args.offset, 10),
+          parseInt(args.limit, 10)
         );
       }
     },
