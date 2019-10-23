@@ -23,6 +23,9 @@ import {
 import { mutationType } from "./mutations";
 import { subscriptionType } from "./subscriptions";
 
+let paginate = <T>(offset: number, limit: number, array: T[]) => 
+  array.slice(offset, offset + limit);
+
 let queryType = new GraphQLObjectType({
   name: "Query",
   fields: () => ({
@@ -59,10 +62,10 @@ let queryType = new GraphQLObjectType({
           args.status ? ticket.status === args.status : true
         );
 
-        return ticketsByStatus.slice(
-          parseInt(args.offset, 10),
-          parseInt(args.limit, 10)
-        );
+        let offset = parseInt(args.offset, 10);
+        let limit = parseInt(args.limit, 10);
+        
+        return paginate(offset, limit, ticketsByStatus);
       }
     },
     todosConnection: {
@@ -83,10 +86,10 @@ let queryType = new GraphQLObjectType({
         }
       },
       resolve(root, args, obj) {
-        return todoItems.slice(
-          parseInt(args.offset, 10),
-          parseInt(args.limit, 10)
-        );
+        let offset = parseInt(args.offset, 10);
+        let limit = parseInt(args.limit, 10);
+
+        return paginate(offset, limit, todoItems);
       }
     }
   })
