@@ -21,7 +21,7 @@ import {
   connectionFromArray
 } from "graphql-relay";
 
-import { users, workingGroups } from "./db";
+import { users, workingGroups, data } from "./db";
 
 // @ts-ignore
 export let { nodeInterface, nodeField } = nodeDefinitions(

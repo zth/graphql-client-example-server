@@ -123,5 +123,6 @@ export let data = {
   SiteStatistics: [siteStatistics],
   User: users,
   Ticket: tickets,
-  TodoItem: todoItems
+  TodoItem: todoItems,
+  WorkingGroup: workingGroups
 };
