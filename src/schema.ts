@@ -9,6 +9,7 @@ import {
 import { connectionArgs, connectionFromArray } from "graphql-relay";
 
 import { siteStatistics, tickets, todoItems } from "./db";
+import { paginate } from "./utils";
 
 import {
   siteStatisticsType,
@@ -22,9 +23,6 @@ import {
 
 import { mutationType } from "./mutations";
 import { subscriptionType } from "./subscriptions";
-
-let paginate = <T>(offset: number, limit: number, array: T[]) => 
-  array.slice(offset, offset + limit);
 
 let queryType = new GraphQLObjectType({
   name: "Query",
@@ -64,7 +62,7 @@ let queryType = new GraphQLObjectType({
 
         let offset = parseInt(args.offset, 10);
         let limit = parseInt(args.limit, 10);
-        
+
         return paginate(offset, limit, ticketsByStatus);
       }
     },

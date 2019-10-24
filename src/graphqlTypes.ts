@@ -22,6 +22,7 @@ import {
 } from "graphql-relay";
 
 import { users, workingGroups, data } from "./db";
+import { paginate } from "./utils";
 
 // @ts-ignore
 export let { nodeInterface, nodeField } = nodeDefinitions(
@@ -102,10 +103,13 @@ export let workingGroupType: GraphQLObjectType = new GraphQLObjectType({
       },
       type: new GraphQLList(userType),
       resolve(obj, args) {
-        return obj.memberIds
-          .map((id: number) => users.find(u => u.id === id))
-          .filter(Boolean)
-          .slice(parseInt(args.offset, 10), parseInt(args.limit, 10));
+        return paginate(
+          args.offset,
+          args.limit,
+          obj.memberIds
+            .map((id: number) => users.find(u => u.id === id))
+            .filter(Boolean)
+        );
       }
     }
   }),
