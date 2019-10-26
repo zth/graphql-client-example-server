@@ -12,12 +12,13 @@ npm install -g graphql-client-example-server
 
 ...and then simply running with `graphql-client-example-server`.
 
+You can also provide a `PORT` environment variable to control what port the server will run on (default `4000`).
+
 ## Developing
 
 ### Running
 
 ```
-// You can provide the PORT env-variable to control what port the server runs on (default 4000).
 yarn start
 ```
 
