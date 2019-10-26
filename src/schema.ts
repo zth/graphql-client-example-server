@@ -3,12 +3,17 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLList,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLID
 } from "graphql";
 
-import { connectionArgs, connectionFromArray } from "graphql-relay";
+import {
+  connectionArgs,
+  connectionFromArray,
+  fromGlobalId
+} from "graphql-relay";
 
-import { siteStatistics, tickets, todoItems } from "./db";
+import { siteStatistics, tickets, todoItems, users } from "./db";
 import { paginate } from "./utils";
 
 import {
@@ -18,7 +23,8 @@ import {
   todoConnection,
   nodeField,
   todoItemType,
-  ticketType
+  ticketType,
+  userType
 } from "./graphqlTypes";
 
 import { mutationType } from "./mutations";
@@ -28,6 +34,18 @@ let queryType = new GraphQLObjectType({
   name: "Query",
   fields: () => ({
     node: nodeField,
+    userById: {
+      type: userType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID)
+        }
+      },
+      resolve(root, args) {
+        let { id } = fromGlobalId(args.id);
+        return users.find(u => u.id === parseInt(id, 10));
+      }
+    },
     siteStatistics: {
       type: new GraphQLNonNull(siteStatisticsType),
       resolve: () => siteStatistics
@@ -35,7 +53,7 @@ let queryType = new GraphQLObjectType({
     ticketsConnection: {
       type: new GraphQLNonNull(ticketConnection.connectionType),
       args: { status: { type: ticketStatusEnum }, ...connectionArgs },
-      resolve(root, args, obj) {
+      resolve(root, args) {
         return connectionFromArray(
           tickets.filter(ticket =>
             args.status ? ticket.status === args.status : true
