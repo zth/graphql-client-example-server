@@ -1,5 +1,13 @@
 # Changelog
 
+## master
+
+...
+
+## 1.1.3
+
+- Adjust image URL:s for user avatars.
+
 ## 1.1.2
 
 - Releases now include `README.md`.

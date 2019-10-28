@@ -5,25 +5,25 @@ export let users: User[] = [
     type: "User",
     id: 1,
     fullName: "David Grey",
-    avatarUrl: "assets/images/faces/face1.jpg"
+    avatarUrl: "/images/faces/face1.jpg"
   },
   {
     type: "User",
     id: 2,
     fullName: "Stella Johnson",
-    avatarUrl: "assets/images/faces/face2.jpg"
+    avatarUrl: "/images/faces/face2.jpg"
   },
   {
     type: "User",
     id: 3,
     fullName: "Marina Michel",
-    avatarUrl: "assets/images/faces/face3.jpg"
+    avatarUrl: "/images/faces/face3.jpg"
   },
   {
     type: "User",
     id: 4,
     fullName: "John Doe",
-    avatarUrl: "assets/images/faces/face4.jpg"
+    avatarUrl: "/images/faces/face4.jpg"
   }
 ];
 
