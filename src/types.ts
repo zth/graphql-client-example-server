@@ -45,5 +45,6 @@ export type TodoItem = {
 
 export type PaginatedList<T> = {
   total: number;
+  hasNextPage: boolean;
   results: T[];
 };

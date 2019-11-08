@@ -81,12 +81,7 @@ let queryType = new GraphQLObjectType({
         const offset = parseInt(args.offset, 10);
         const limit = parseInt(args.limit, 10);
 
-        const results = paginate(offset, limit, ticketsByStatus);
-
-        return {
-          results,
-          total: ticketsByStatus.length
-        };
+        return paginate(offset, limit, ticketsByStatus);
       }
     },
     todosConnection: {
@@ -110,12 +105,7 @@ let queryType = new GraphQLObjectType({
         const offset = parseInt(args.offset, 10);
         const limit = parseInt(args.limit, 10);
 
-        const results = paginate(offset, limit, todoItems);
-
-        return {
-          results,
-          total: todoItems.length
-        };
+        return paginate(offset, limit, todoItems);
       }
     }
   })

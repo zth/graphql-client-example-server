@@ -61,6 +61,7 @@ const paginationDefinitions = (objectType: GraphQLObjectType, name: string) =>
     name,
     fields: () => ({
       total: { type: new GraphQLNonNull(GraphQLInt) },
+      hasNextPage: { type: new GraphQLNonNull(GraphQLBoolean) },
       results: {
         type: new GraphQLNonNull(
           new GraphQLList(new GraphQLNonNull(objectType))

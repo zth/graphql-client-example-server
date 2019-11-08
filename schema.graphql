@@ -111,6 +111,7 @@ type TicketEdge {
 
 type TicketsPaginated {
   total: Int!
+  hasNextPage: Boolean!
   results: [Ticket!]!
 }
 
@@ -149,6 +150,7 @@ type TodoItemEdge {
 
 type TodosPaginated {
   total: Int!
+  hasNextPage: Boolean!
   results: [TodoItem!]!
 }
 
