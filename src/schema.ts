@@ -2,7 +2,6 @@ import {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLNonNull,
-  GraphQLList,
   GraphQLInt,
   GraphQLID
 } from "graphql";
@@ -22,13 +21,14 @@ import {
   ticketConnection,
   todoConnection,
   nodeField,
-  todoItemType,
-  ticketType,
-  userType
+  userType,
+  ticketsPaginatedType,
+  todosPaginatedType
 } from "./graphqlTypes";
 
 import { mutationType } from "./mutations";
 import { subscriptionType } from "./subscriptions";
+import { PaginatedList, Ticket, TodoItem } from "./types";
 
 let queryType = new GraphQLObjectType({
   name: "Query",
@@ -63,7 +63,7 @@ let queryType = new GraphQLObjectType({
       }
     },
     tickets: {
-      type: new GraphQLNonNull(new GraphQLList(ticketType)),
+      type: new GraphQLNonNull(ticketsPaginatedType),
       args: {
         status: { type: ticketStatusEnum },
         limit: {
@@ -73,15 +73,20 @@ let queryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLInt)
         }
       },
-      resolve(root, args, obj) {
+      resolve(_, args, __): PaginatedList<Ticket> {
         const ticketsByStatus = tickets.filter(ticket =>
           args.status ? ticket.status === args.status : true
         );
 
-        let offset = parseInt(args.offset, 10);
-        let limit = parseInt(args.limit, 10);
+        const offset = parseInt(args.offset, 10);
+        const limit = parseInt(args.limit, 10);
 
-        return paginate(offset, limit, ticketsByStatus);
+        const results = paginate(offset, limit, ticketsByStatus);
+
+        return {
+          results,
+          total: ticketsByStatus.length
+        };
       }
     },
     todosConnection: {
@@ -92,7 +97,7 @@ let queryType = new GraphQLObjectType({
       }
     },
     todos: {
-      type: new GraphQLNonNull(new GraphQLList(todoItemType)),
+      type: new GraphQLNonNull(todosPaginatedType),
       args: {
         limit: {
           type: new GraphQLNonNull(GraphQLInt)
@@ -101,11 +106,16 @@ let queryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLInt)
         }
       },
-      resolve(root, args, obj) {
-        let offset = parseInt(args.offset, 10);
-        let limit = parseInt(args.limit, 10);
+      resolve(_, args, __): PaginatedList<TodoItem> {
+        const offset = parseInt(args.offset, 10);
+        const limit = parseInt(args.limit, 10);
 
-        return paginate(offset, limit, todoItems);
+        const results = paginate(offset, limit, todoItems);
+
+        return {
+          results,
+          total: todoItems.length
+        };
       }
     }
   })

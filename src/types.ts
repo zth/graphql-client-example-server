@@ -42,3 +42,8 @@ export type TodoItem = {
   text: string;
   completed: boolean;
 };
+
+export type PaginatedList<T> = {
+  total: number;
+  results: T[];
+};

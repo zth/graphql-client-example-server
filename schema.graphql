@@ -63,9 +63,9 @@ type Query {
   userById(id: ID!): User
   siteStatistics: SiteStatistics!
   ticketsConnection(status: TicketStatus, after: String, first: Int, before: String, last: Int): TicketConnection!
-  tickets(status: TicketStatus, limit: Int!, offset: Int!): [Ticket]!
+  tickets(status: TicketStatus, limit: Int!, offset: Int!): TicketsPaginated!
   todosConnection(after: String, first: Int, before: String, last: Int): TodoItemConnection!
-  todos(limit: Int!, offset: Int!): [TodoItem]!
+  todos(limit: Int!, offset: Int!): TodosPaginated!
 }
 
 type SiteStatistics implements Node {
@@ -109,6 +109,11 @@ type TicketEdge {
   cursor: String!
 }
 
+type TicketsPaginated {
+  total: Int!
+  results: [Ticket!]!
+}
+
 enum TicketStatus {
   Done
   Progress
@@ -140,6 +145,11 @@ type TodoItemEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+type TodosPaginated {
+  total: Int!
+  results: [TodoItem!]!
 }
 
 input UpdateTodoItemInput {

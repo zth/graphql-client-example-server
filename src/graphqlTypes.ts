@@ -56,6 +56,19 @@ export let { nodeInterface, nodeField } = nodeDefinitions(
   }
 );
 
+const paginationDefinitions = (objectType: GraphQLObjectType, name: string) =>
+  new GraphQLObjectType({
+    name,
+    fields: () => ({
+      total: { type: new GraphQLNonNull(GraphQLInt) },
+      results: {
+        type: new GraphQLNonNull(
+          new GraphQLList(new GraphQLNonNull(objectType))
+        )
+      }
+    })
+  });
+
 export let userType: GraphQLObjectType = new GraphQLObjectType({
   name: "User",
   fields: () => ({
@@ -187,6 +200,11 @@ export let ticketType: GraphQLObjectType = new GraphQLObjectType({
 
 export let ticketConnection = connectionDefinitions({ nodeType: ticketType });
 
+export let ticketsPaginatedType: GraphQLObjectType = paginationDefinitions(
+  ticketType,
+  "TicketsPaginated"
+);
+
 export let todoItemType: GraphQLObjectType = new GraphQLObjectType({
   name: "TodoItem",
   fields: () => ({
@@ -202,3 +220,8 @@ export let todoItemType: GraphQLObjectType = new GraphQLObjectType({
 });
 
 export let todoConnection = connectionDefinitions({ nodeType: todoItemType });
+
+export let todosPaginatedType: GraphQLObjectType = paginationDefinitions(
+  todoItemType,
+  "TodosPaginated"
+);
