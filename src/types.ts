@@ -48,3 +48,9 @@ export type PaginatedList<T> = {
   hasNextPage: boolean;
   results: T[];
 };
+
+export type TodoUpdateInputType = {
+  id: string;
+  text: string;
+  completed: boolean;
+};

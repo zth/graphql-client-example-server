@@ -27,10 +27,17 @@ type DeleteTodoItemPayload {
   clientMutationId: String
 }
 
+type DeleteTodoSimple {
+  deletedTodoItemId: ID!
+}
+
 type Mutation {
   addTodoItem(input: AddTodoItemInput!): AddTodoItemPayload
   updateTodoItem(input: UpdateTodoItemInput!): UpdateTodoItemPayload
   deleteTodoItem(input: DeleteTodoItemInput!): DeleteTodoItemPayload
+  addTodoSimple(text: String!): TodoItem!
+  updateTodoSimple(id: ID!, text: String!, completed: Boolean): TodoItem
+  deleteTodoSimple(id: ID!): DeleteTodoSimple
 }
 
 """An object with an ID"""
@@ -66,6 +73,7 @@ type Query {
   tickets(status: TicketStatus, limit: Int!, offset: Int!): TicketsPaginated!
   todosConnection(after: String, first: Int, before: String, last: Int): TodoItemConnection!
   todos(limit: Int!, offset: Int!): TodosPaginated!
+  allTodos: [TodoItem!]!
 }
 
 type SiteStatistics implements Node {

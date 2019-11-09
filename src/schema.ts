@@ -3,7 +3,8 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLInt,
-  GraphQLID
+  GraphQLID,
+  GraphQLList
 } from "graphql";
 
 import {
@@ -23,7 +24,8 @@ import {
   nodeField,
   userType,
   ticketsPaginatedType,
-  todosPaginatedType
+  todosPaginatedType,
+  todoItemType
 } from "./graphqlTypes";
 
 import { mutationType } from "./mutations";
@@ -106,6 +108,14 @@ let queryType = new GraphQLObjectType({
         const limit = parseInt(args.limit, 10);
 
         return paginate(offset, limit, todoItems);
+      }
+    },
+    allTodos: {
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(todoItemType))
+      ),
+      resolve(): TodoItem[] {
+        return todoItems;
       }
     }
   })
