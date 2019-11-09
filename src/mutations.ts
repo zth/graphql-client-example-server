@@ -11,61 +11,6 @@ import { todoItemType } from "./graphqlTypes";
 import { todoItems } from "./db";
 import { TodoItem, TodoUpdateInputType } from "./types";
 
-/** utils */
-let addTodo = (text: string) => {
-  let lastTodoItem = todoItems.slice().pop();
-  let nextIndex = lastTodoItem ? lastTodoItem.id + 1 : 1;
-
-  let newTodo: TodoItem = {
-    id: nextIndex,
-    type: "TodoItem",
-    text: text,
-    completed: false
-  };
-
-  todoItems.push(newTodo);
-  return {
-    addedTodoItem: newTodo
-  };
-};
-
-let updateTodo = (id: string, text: string, completed: boolean) => {
-  let { type, id: todoItemId } = fromGlobalId(id);
-  let targetTodoItem = todoItems.find(t => t.id === parseInt(todoItemId, 10));
-
-  if (!targetTodoItem || type !== "TodoItem") {
-    return {
-      updatedTodoItem: null
-    };
-  }
-
-  targetTodoItem.text = text;
-  targetTodoItem.completed = completed;
-
-  return {
-    updatedTodoItem: targetTodoItem
-  };
-};
-
-let deleteTodo = (id: string) => {
-  let { type, id: todoItemId } = fromGlobalId(id);
-  let targetTodoItemIndex = todoItems.findIndex(
-    t => t.id === parseInt(todoItemId, 10)
-  );
-
-  if (targetTodoItemIndex === -1 || type !== "TodoItem") {
-    return {
-      deleteTodoItemId: null
-    };
-  }
-
-  todoItems.splice(targetTodoItemIndex, 1);
-
-  return {
-    deletedTodoItemId: id
-  };
-};
-
 /** relay style mutations */
 let addTodoItemMutation = mutationWithClientMutationId({
   name: "AddTodoItem",
@@ -83,6 +28,23 @@ let addTodoItemMutation = mutationWithClientMutationId({
     return addTodo(text);
   }
 });
+
+let addTodo = (text: string) => {
+  let lastTodoItem = todoItems.slice().pop();
+  let nextIndex = lastTodoItem ? lastTodoItem.id + 1 : 1;
+
+  let newTodo: TodoItem = {
+    id: nextIndex,
+    type: "TodoItem",
+    text: text,
+    completed: false
+  };
+
+  todoItems.push(newTodo);
+  return {
+    addedTodoItem: newTodo
+  };
+};
 
 let updateTodoItemMutation = mutationWithClientMutationId({
   name: "UpdateTodoItem",
@@ -107,6 +69,24 @@ let updateTodoItemMutation = mutationWithClientMutationId({
   }
 });
 
+let updateTodo = (id: string, text: string, completed: boolean) => {
+  let { type, id: todoItemId } = fromGlobalId(id);
+  let targetTodoItem = todoItems.find(t => t.id === parseInt(todoItemId, 10));
+
+  if (!targetTodoItem || type !== "TodoItem") {
+    return {
+      updatedTodoItem: null
+    };
+  }
+
+  targetTodoItem.text = text;
+  targetTodoItem.completed = completed;
+
+  return {
+    updatedTodoItem: targetTodoItem
+  };
+};
+
 let deleteTodoItemMutation = mutationWithClientMutationId({
   name: "DeleteTodoItem",
   inputFields: () => ({
@@ -123,6 +103,25 @@ let deleteTodoItemMutation = mutationWithClientMutationId({
     return deleteTodo(id);
   }
 });
+
+let deleteTodo = (id: string) => {
+  let { type, id: todoItemId } = fromGlobalId(id);
+  let targetTodoItemIndex = todoItems.findIndex(
+    t => t.id === parseInt(todoItemId, 10)
+  );
+
+  if (targetTodoItemIndex === -1 || type !== "TodoItem") {
+    return {
+      deleteTodoItemId: null
+    };
+  }
+
+  todoItems.splice(targetTodoItemIndex, 1);
+
+  return {
+    deletedTodoItemId: id
+  };
+};
 
 /** apollo style */
 let addTodoSimple: GraphQLFieldConfig<any, any, any> = {
