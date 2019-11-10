@@ -42,3 +42,15 @@ export type TodoItem = {
   text: string;
   completed: boolean;
 };
+
+export type PaginatedList<T> = {
+  total: number;
+  hasNextPage: boolean;
+  results: T[];
+};
+
+export type TodoUpdateInputType = {
+  id: string;
+  text: string;
+  completed: boolean;
+};
