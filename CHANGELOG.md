@@ -4,6 +4,10 @@
 
 ...
 
+## 1.2.0
+
+- Added new simple mutation variants for the todo's, that are more easily usable with Apollo.
+
 ## 1.1.3
 
 - Adjust image URL:s for user avatars.
