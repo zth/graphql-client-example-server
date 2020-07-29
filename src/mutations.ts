@@ -5,9 +5,9 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLID,
-  GraphQLFieldConfig
+  GraphQLFieldConfig,
 } from "graphql";
-import { todoItemType } from "./graphqlTypes";
+import { todoItemType, todoConnection } from "./graphqlTypes";
 import { todoItems } from "./db";
 import { TodoItem, TodoUpdateInputType } from "./types";
 
@@ -16,17 +16,20 @@ let addTodoItemMutation = mutationWithClientMutationId({
   name: "AddTodoItem",
   inputFields: () => ({
     text: {
-      type: new GraphQLNonNull(GraphQLString)
-    }
+      type: new GraphQLNonNull(GraphQLString),
+    },
   }),
   outputFields: () => ({
     addedTodoItem: {
-      type: todoItemType
-    }
+      type: todoItemType,
+    },
+    addedTodoItemEdge: {
+      type: todoConnection.edgeType,
+    },
   }),
   mutateAndGetPayload: ({ text }) => {
     return addTodo(text);
-  }
+  },
 });
 
 let addTodo = (text: string) => {
@@ -37,12 +40,16 @@ let addTodo = (text: string) => {
     id: nextIndex,
     type: "TodoItem",
     text: text,
-    completed: false
+    completed: false,
   };
 
   todoItems.push(newTodo);
   return {
-    addedTodoItem: newTodo
+    addedTodoItem: newTodo,
+    addedTodoItemEdge: {
+      cursor: "",
+      node: newTodo,
+    },
   };
 };
 
@@ -50,32 +57,32 @@ let updateTodoItemMutation = mutationWithClientMutationId({
   name: "UpdateTodoItem",
   inputFields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLID)
+      type: new GraphQLNonNull(GraphQLID),
     },
     text: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLString),
     },
     completed: {
-      type: new GraphQLNonNull(GraphQLBoolean)
-    }
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   }),
   outputFields: () => ({
     updatedTodoItem: {
-      type: todoItemType
-    }
+      type: todoItemType,
+    },
   }),
   mutateAndGetPayload: ({ text, completed, id }) => {
     return updateTodo(id, text, completed);
-  }
+  },
 });
 
 let updateTodo = (id: string, text: string, completed: boolean) => {
   let { type, id: todoItemId } = fromGlobalId(id);
-  let targetTodoItem = todoItems.find(t => t.id === parseInt(todoItemId, 10));
+  let targetTodoItem = todoItems.find((t) => t.id === parseInt(todoItemId, 10));
 
   if (!targetTodoItem || type !== "TodoItem") {
     return {
-      updatedTodoItem: null
+      updatedTodoItem: null,
     };
   }
 
@@ -83,7 +90,7 @@ let updateTodo = (id: string, text: string, completed: boolean) => {
   targetTodoItem.completed = completed;
 
   return {
-    updatedTodoItem: targetTodoItem
+    updatedTodoItem: targetTodoItem,
   };
 };
 
@@ -91,35 +98,35 @@ let deleteTodoItemMutation = mutationWithClientMutationId({
   name: "DeleteTodoItem",
   inputFields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLID)
-    }
+      type: new GraphQLNonNull(GraphQLID),
+    },
   }),
   outputFields: () => ({
     deletedTodoItemId: {
-      type: GraphQLID
-    }
+      type: GraphQLID,
+    },
   }),
   mutateAndGetPayload: ({ id }) => {
     return deleteTodo(id);
-  }
+  },
 });
 
 let deleteTodo = (id: string) => {
   let { type, id: todoItemId } = fromGlobalId(id);
   let targetTodoItemIndex = todoItems.findIndex(
-    t => t.id === parseInt(todoItemId, 10)
+    (t) => t.id === parseInt(todoItemId, 10)
   );
 
   if (targetTodoItemIndex === -1 || type !== "TodoItem") {
     return {
-      deleteTodoItemId: null
+      deleteTodoItemId: null,
     };
   }
 
   todoItems.splice(targetTodoItemIndex, 1);
 
   return {
-    deletedTodoItemId: id
+    deletedTodoItemId: id,
   };
 };
 
@@ -127,11 +134,11 @@ let deleteTodo = (id: string) => {
 let addTodoSimple: GraphQLFieldConfig<any, any, any> = {
   type: new GraphQLNonNull(todoItemType),
   args: {
-    text: { type: new GraphQLNonNull(GraphQLString) }
+    text: { type: new GraphQLNonNull(GraphQLString) },
   },
   resolve(_, { text }) {
     return addTodo(text).addedTodoItem;
-  }
+  },
 };
 
 let updateTodoSimple: GraphQLFieldConfig<any, any, any> = {
@@ -139,11 +146,11 @@ let updateTodoSimple: GraphQLFieldConfig<any, any, any> = {
   args: {
     id: { type: new GraphQLNonNull(GraphQLID) },
     text: { type: new GraphQLNonNull(GraphQLString) },
-    completed: { type: GraphQLBoolean }
+    completed: { type: GraphQLBoolean },
   },
   resolve(_, { id, text, completed }: TodoUpdateInputType) {
     return updateTodo(id, text, completed).updatedTodoItem;
-  }
+  },
 };
 
 let deleteTodoSimple: GraphQLFieldConfig<any, any, any> = {
@@ -151,16 +158,16 @@ let deleteTodoSimple: GraphQLFieldConfig<any, any, any> = {
     name: "DeleteTodoSimple",
     fields: () => ({
       deletedTodoItemId: {
-        type: new GraphQLNonNull(GraphQLID)
-      }
-    })
+        type: new GraphQLNonNull(GraphQLID),
+      },
+    }),
   }),
   args: {
-    id: { type: new GraphQLNonNull(GraphQLID) }
+    id: { type: new GraphQLNonNull(GraphQLID) },
   },
   resolve(_, { id }) {
     return deleteTodo(id);
-  }
+  },
 };
 
 export let mutationType = new GraphQLObjectType({
@@ -172,6 +179,6 @@ export let mutationType = new GraphQLObjectType({
     // apollo style
     addTodoSimple,
     updateTodoSimple,
-    deleteTodoSimple
-  })
+    deleteTodoSimple,
+  }),
 });
