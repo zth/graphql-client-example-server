@@ -1,5 +1,5 @@
 export type SiteStatistics = {
-  type: "SiteStatistics";
+  type: 'SiteStatistics';
   id: number;
   weeklySales: number;
   weeklyOrders: number;
@@ -7,27 +7,27 @@ export type SiteStatistics = {
 };
 
 export type User = {
-  type: "User";
+  type: 'User';
   id: number;
   avatarUrl: string | null;
   fullName: string;
 };
 
 export type WorkingGroup = {
-  type: "WorkingGroup";
+  type: 'WorkingGroup';
   id: number;
   name: string;
   memberIds: number[];
 };
 
 type AssigneeUnion =
-  | { type: "User"; id: number }
-  | { type: "WorkingGroup"; id: number };
+  | { type: 'User'; id: number }
+  | { type: 'WorkingGroup'; id: number };
 
-export type TicketStatus = "Done" | "Progress" | "OnHold" | "Rejected";
+export type TicketStatus = 'Done' | 'Progress' | 'OnHold' | 'Rejected';
 
 export type Ticket = {
-  type: "Ticket";
+  type: 'Ticket';
   id: number;
   assignee: AssigneeUnion | null;
   subject: string;
@@ -37,7 +37,7 @@ export type Ticket = {
 };
 
 export type TodoItem = {
-  type: "TodoItem";
+  type: 'TodoItem';
   id: number;
   text: string;
   completed: boolean;

@@ -5,16 +5,16 @@ import {
   GraphQLInt,
   GraphQLID,
   GraphQLList
-} from "graphql";
+} from 'graphql';
 
 import {
   connectionArgs,
   connectionFromArray,
   fromGlobalId
-} from "graphql-relay";
+} from 'graphql-relay';
 
-import { siteStatistics, tickets, todoItems, users } from "./db";
-import { paginate } from "./utils";
+import { siteStatistics, tickets, todoItems, users } from './db';
+import { paginate } from './utils';
 
 import {
   siteStatisticsType,
@@ -26,14 +26,14 @@ import {
   ticketsPaginatedType,
   todosPaginatedType,
   todoItemType
-} from "./graphqlTypes";
+} from './graphqlTypes';
 
-import { mutationType } from "./mutations";
-import { subscriptionType } from "./subscriptions";
-import { PaginatedList, Ticket, TodoItem } from "./types";
+import { mutationType } from './mutations';
+import { subscriptionType } from './subscriptions';
+import { PaginatedList, Ticket, TodoItem } from './types';
 
 let queryType = new GraphQLObjectType({
-  name: "Query",
+  name: 'Query',
   fields: () => ({
     node: nodeField,
     userById: {

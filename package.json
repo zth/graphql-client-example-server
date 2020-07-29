@@ -13,7 +13,8 @@
     "build-artifact": "ncc build src/index.ts -o out/bin",
     "build": "yarn tsc",
     "generate-schema": "yarn build && node dist/scripts/generateSchemaGraphQLFile.js",
-    "start": "yarn build && node dist/index.js"
+    "start": "yarn build && node dist/index.js",
+    "prettier": "find . -name node_modules -prune -or -name dist -prune -or -name '*.ts' -print | xargs prettier --write"
   },
   "husky": {
     "hooks": {

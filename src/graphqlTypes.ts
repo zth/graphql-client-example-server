@@ -9,9 +9,9 @@ import {
   GraphQLID,
   GraphQLUnionType,
   GraphQLList
-} from "graphql";
+} from 'graphql';
 
-import { GraphQLDateTime } from "graphql-iso-date";
+import { GraphQLDateTime } from 'graphql-iso-date';
 
 import {
   fromGlobalId,
@@ -19,10 +19,10 @@ import {
   nodeDefinitions,
   connectionDefinitions,
   connectionFromArray
-} from "graphql-relay";
+} from 'graphql-relay';
 
-import { users, workingGroups, data } from "./db";
-import { paginate } from "./utils";
+import { users, workingGroups, data } from './db';
+import { paginate } from './utils';
 
 // @ts-ignore
 export let { nodeInterface, nodeField } = nodeDefinitions(
@@ -42,15 +42,15 @@ export let { nodeInterface, nodeField } = nodeDefinitions(
   // @ts-ignore
   (obj: { type: string }) => {
     switch (obj.type) {
-      case "User":
+      case 'User':
         return userType;
-      case "WorkingGroup":
+      case 'WorkingGroup':
         return workingGroupType;
-      case "SiteStatistics":
+      case 'SiteStatistics':
         return siteStatisticsType;
-      case "Ticket":
+      case 'Ticket':
         return ticketType;
-      case "TodoItem":
+      case 'TodoItem':
         return todoItemType;
     }
   }
@@ -71,7 +71,7 @@ const paginationDefinitions = (objectType: GraphQLObjectType, name: string) =>
   });
 
 export let userType: GraphQLObjectType = new GraphQLObjectType({
-  name: "User",
+  name: 'User',
   fields: () => ({
     id: globalIdField(),
     dbId: {
@@ -87,7 +87,7 @@ export let userType: GraphQLObjectType = new GraphQLObjectType({
 export let userConnection = connectionDefinitions({ nodeType: userType });
 
 export let workingGroupType: GraphQLObjectType = new GraphQLObjectType({
-  name: "WorkingGroup",
+  name: 'WorkingGroup',
   fields: () => ({
     id: globalIdField(),
     dbId: {
@@ -131,19 +131,19 @@ export let workingGroupType: GraphQLObjectType = new GraphQLObjectType({
 });
 
 export let assigneeUnionType = new GraphQLUnionType({
-  name: "AssigneeType",
+  name: 'AssigneeType',
   types: [userType, workingGroupType],
   resolveType(value) {
-    if (value.type === "User") {
+    if (value.type === 'User') {
       return userType;
-    } else if (value.type === "WorkingGroup") {
+    } else if (value.type === 'WorkingGroup') {
       return workingGroupType;
     }
   }
 });
 
 export let siteStatisticsType: GraphQLObjectType = new GraphQLObjectType({
-  name: "SiteStatistics",
+  name: 'SiteStatistics',
   fields: () => ({
     id: globalIdField(),
     weeklySales: { type: new GraphQLNonNull(GraphQLFloat) },
@@ -154,17 +154,17 @@ export let siteStatisticsType: GraphQLObjectType = new GraphQLObjectType({
 });
 
 export let ticketStatusEnum = new GraphQLEnumType({
-  name: "TicketStatus",
+  name: 'TicketStatus',
   values: {
-    Done: { value: "Done" },
-    Progress: { value: "Progress" },
-    OnHold: { value: "OnHold" },
-    Rejected: { value: "Rejected" }
+    Done: { value: 'Done' },
+    Progress: { value: 'Progress' },
+    OnHold: { value: 'OnHold' },
+    Rejected: { value: 'Rejected' }
   }
 });
 
 export let ticketType: GraphQLObjectType = new GraphQLObjectType({
-  name: "Ticket",
+  name: 'Ticket',
   fields: () => ({
     id: globalIdField(),
     dbId: {
@@ -179,9 +179,9 @@ export let ticketType: GraphQLObjectType = new GraphQLObjectType({
         }
 
         switch (obj.assignee.type) {
-          case "User":
+          case 'User':
             return users.find(u => u.id === obj.assignee.id);
-          case "WorkingGroup":
+          case 'WorkingGroup':
             return workingGroups.find(wg => wg.id === obj.assignee.id);
           default:
             return null;
@@ -203,11 +203,11 @@ export let ticketConnection = connectionDefinitions({ nodeType: ticketType });
 
 export let ticketsPaginatedType: GraphQLObjectType = paginationDefinitions(
   ticketType,
-  "TicketsPaginated"
+  'TicketsPaginated'
 );
 
 export let todoItemType: GraphQLObjectType = new GraphQLObjectType({
-  name: "TodoItem",
+  name: 'TodoItem',
   fields: () => ({
     id: globalIdField(),
     dbId: {
@@ -224,5 +224,5 @@ export let todoConnection = connectionDefinitions({ nodeType: todoItemType });
 
 export let todosPaginatedType: GraphQLObjectType = paginationDefinitions(
   todoItemType,
-  "TodosPaginated"
+  'TodosPaginated'
 );

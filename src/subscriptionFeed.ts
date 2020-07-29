@@ -3,9 +3,9 @@
  * the appropriate subscriptions.
  */
 
-import { siteStatistics } from "./db";
-import { pubsub } from "./subscriptions";
-import { SITE_STATISTICS_UPDATED } from "./subscriptionTopics";
+import { siteStatistics } from './db';
+import { pubsub } from './subscriptions';
+import { SITE_STATISTICS_UPDATED } from './subscriptionTopics';
 
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * max) + min;
