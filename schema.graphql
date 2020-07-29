@@ -5,6 +5,7 @@ input AddTodoItemInput {
 
 type AddTodoItemPayload {
   addedTodoItem: TodoItem
+  addedTodoItemEdge: TodoItemEdge
   clientMutationId: String
 }
 
