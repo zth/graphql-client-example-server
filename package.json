@@ -18,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn generate-schema"
+      "pre-commit": "yarn prettier && yarn generate-schema && git add schema.graphql"
     }
   },
   "dependencies": {
