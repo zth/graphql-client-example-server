@@ -33,7 +33,7 @@ let addTodoItemMutation = mutationWithClientMutationId({
 });
 
 let addTodo = async (text: string) => {
-  let lastTodoItem = (await todoItems.all()).pop();
+  let lastTodoItem = await todoItems.last();
   let nextIndex = lastTodoItem ? lastTodoItem.id + 1 : 1;
 
   let newTodo: TodoItem = {

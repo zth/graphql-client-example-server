@@ -1,39 +1,115 @@
+import { ConnectionArguments, connectionFromArray } from 'graphql-relay';
 import { User, SiteStatistics, Ticket, TodoItem, WorkingGroup } from './types';
 
 const wait = (time: number) =>
-  new Promise((resolve) => setTimeout(resolve, time))
+  new Promise(resolve => setTimeout(resolve, time));
 
 class Database<T> {
   constructor(private raw: T[], private delay = 500) {}
 
   async push(item: T) {
-    await wait(this.delay)
+    await wait(this.delay);
     this.raw.push(item);
   }
 
-  async all(): Promise<T[]> {
-    await wait(this.delay)
-    return this.raw.slice();
-  }
-
-  async splice(start: number, deleteCount: number, ...items: T[]) {
-    await wait(this.delay)
-    this.raw.splice(start, deleteCount, ...items);
+  async last(): Promise<T> {
+    await wait(this.delay);
+    return this.raw[this.raw.length - 1];
   }
 
   async find(condition: (item: T) => boolean): Promise<T | undefined> {
-    await wait(this.delay)
+    await wait(this.delay);
     return this.raw.find(condition);
   }
 
   async findIndex(condition: (item: T) => boolean): Promise<number> {
-    await wait(this.delay)
+    await wait(this.delay);
     return this.raw.findIndex(condition);
   }
 
-  async filter(condition: (item: T) => boolean): Promise<T[]> {
-    await wait(this.delay)
-    return this.raw.filter(condition);
+  async *all(): AsyncIterator<T> {
+    for (const item of this.raw) {
+      yield item;
+      await wait(this.delay);
+    }
+  }
+
+  allPaginated(offset: number, limit: number) {
+    const self = this;
+    return {
+      async *results() {
+        for (const item of self.raw.slice(offset, offset + limit)) {
+          yield item;
+          await wait(self.delay);
+        }
+      },
+      hasNextPage: offset + limit < this.raw.length,
+      total: this.raw.length
+    };
+  }
+
+  allConnection(args: ConnectionArguments) {
+    const { edges, pageInfo } = connectionFromArray(this.raw, args);
+    const self = this;
+    return {
+      async *edges() {
+        for (const edge of edges) {
+          yield edge;
+          await wait(self.delay);
+        }
+      },
+      pageInfo
+    };
+  }
+
+  async *splice(start: number, deleteCount: number, ...items: T[]) {
+    const spliced = this.raw.splice(start, deleteCount, ...items);
+    for (const item of spliced) {
+      yield item;
+      await wait(this.delay);
+    }
+  }
+
+  async *filter(condition: (item: T) => boolean): AsyncIterable<T> {
+    const filtered = this.raw.filter(condition);
+    for (const item of filtered) {
+      yield item;
+      await wait(this.delay);
+    }
+  }
+
+  filterPaginated(
+    condition: (item: T) => boolean,
+    offset: number,
+    limit: number
+  ) {
+    const filtered = this.raw.filter(condition);
+    const self = this;
+    return {
+      async *results() {
+        for (const item of filtered.slice(offset, offset + limit)) {
+          yield item;
+          await wait(self.delay);
+        }
+      },
+      hasNextPage: offset + limit < filtered.length,
+      total: filtered.length
+    };
+  }
+
+  filterConnection(condition: (item: T) => boolean, args: ConnectionArguments) {
+    const filtered = this.raw.filter(condition);
+    const { edges, pageInfo } = connectionFromArray(filtered, args);
+    const self = this;
+    return {
+      async *edges() {
+        for (const edge of edges) {
+          yield edge;
+          await wait(self.delay);
+        }
+      },
+      pageInfo
+    };
   }
 }
 
