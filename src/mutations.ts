@@ -32,8 +32,8 @@ let addTodoItemMutation = mutationWithClientMutationId({
   }
 });
 
-let addTodo = (text: string) => {
-  let lastTodoItem = todoItems.slice().pop();
+let addTodo = async (text: string) => {
+  let lastTodoItem = (await todoItems.all()).pop();
   let nextIndex = lastTodoItem ? lastTodoItem.id + 1 : 1;
 
   let newTodo: TodoItem = {
@@ -43,7 +43,7 @@ let addTodo = (text: string) => {
     completed: false
   };
 
-  todoItems.push(newTodo);
+  await todoItems.push(newTodo);
   return {
     addedTodoItem: newTodo,
     addedTodoItemEdge: {
@@ -76,9 +76,9 @@ let updateTodoItemMutation = mutationWithClientMutationId({
   }
 });
 
-let updateTodo = (id: string, text: string, completed: boolean) => {
+let updateTodo = async (id: string, text: string, completed: boolean) => {
   let { type, id: todoItemId } = fromGlobalId(id);
-  let targetTodoItem = todoItems.find(t => t.id === parseInt(todoItemId, 10));
+  let targetTodoItem = await todoItems.find(t => t.id === parseInt(todoItemId, 10));
 
   if (!targetTodoItem || type !== 'TodoItem') {
     return {
@@ -111,9 +111,9 @@ let deleteTodoItemMutation = mutationWithClientMutationId({
   }
 });
 
-let deleteTodo = (id: string) => {
+let deleteTodo = async (id: string) => {
   let { type, id: todoItemId } = fromGlobalId(id);
-  let targetTodoItemIndex = todoItems.findIndex(
+  let targetTodoItemIndex = await todoItems.findIndex(
     t => t.id === parseInt(todoItemId, 10)
   );
 
@@ -123,7 +123,7 @@ let deleteTodo = (id: string) => {
     };
   }
 
-  todoItems.splice(targetTodoItemIndex, 1);
+  await todoItems.splice(targetTodoItemIndex, 1);
 
   return {
     deletedTodoItemId: id
@@ -136,8 +136,8 @@ let addTodoSimple: GraphQLFieldConfig<any, any, any> = {
   args: {
     text: { type: new GraphQLNonNull(GraphQLString) }
   },
-  resolve(_, { text }) {
-    return addTodo(text).addedTodoItem;
+  async resolve(_, { text }) {
+    return (await addTodo(text)).addedTodoItem;
   }
 };
 
@@ -148,8 +148,8 @@ let updateTodoSimple: GraphQLFieldConfig<any, any, any> = {
     text: { type: new GraphQLNonNull(GraphQLString) },
     completed: { type: GraphQLBoolean }
   },
-  resolve(_, { id, text, completed }: TodoUpdateInputType) {
-    return updateTodo(id, text, completed).updatedTodoItem;
+  async resolve(_, { id, text, completed }: TodoUpdateInputType) {
+    return (await updateTodo(id, text, completed)).updatedTodoItem;
   }
 };
 

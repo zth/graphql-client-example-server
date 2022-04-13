@@ -4,7 +4,8 @@ import {
   GraphQLNonNull,
   GraphQLInt,
   GraphQLID,
-  GraphQLList
+  GraphQLList,
+  GraphQLDeferDirective
 } from 'graphql';
 
 import {
@@ -55,9 +56,9 @@ let queryType = new GraphQLObjectType({
     ticketsConnection: {
       type: new GraphQLNonNull(ticketConnection.connectionType),
       args: { status: { type: ticketStatusEnum }, ...connectionArgs },
-      resolve(root, args) {
+      async resolve(root, args) {
         return connectionFromArray(
-          tickets.filter(ticket =>
+          await tickets.filter(ticket =>
             args.status ? ticket.status === args.status : true
           ),
           args
@@ -75,7 +76,7 @@ let queryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLInt)
         }
       },
-      resolve(_, args, __): PaginatedList<Ticket> {
+      async resolve(_, args, __): Promise<PaginatedList<Ticket>> {
         const ticketsByStatus = tickets.filter(ticket =>
           args.status ? ticket.status === args.status : true
         );
@@ -83,14 +84,14 @@ let queryType = new GraphQLObjectType({
         const offset = parseInt(args.offset, 10);
         const limit = parseInt(args.limit, 10);
 
-        return paginate(offset, limit, ticketsByStatus);
+        return paginate(offset, limit, await ticketsByStatus);
       }
     },
     todosConnection: {
       type: new GraphQLNonNull(todoConnection.connectionType),
       args: connectionArgs,
-      resolve(root, args, obj) {
-        return connectionFromArray(todoItems, args);
+      async resolve(root, args, obj) {
+        return connectionFromArray(await todoItems.all(), args);
       }
     },
     todos: {
@@ -103,19 +104,19 @@ let queryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLInt)
         }
       },
-      resolve(_, args, __): PaginatedList<TodoItem> {
+      async resolve(_, args, __): Promise<PaginatedList<TodoItem>> {
         const offset = parseInt(args.offset, 10);
         const limit = parseInt(args.limit, 10);
 
-        return paginate(offset, limit, todoItems);
+        return paginate(offset, limit, await todoItems.all());
       }
     },
     allTodos: {
       type: new GraphQLNonNull(
         new GraphQLList(new GraphQLNonNull(todoItemType))
       ),
-      resolve(): TodoItem[] {
-        return todoItems;
+      async resolve(): Promise<TodoItem[]> {
+        return await todoItems.all();
       }
     }
   })
@@ -124,5 +125,6 @@ let queryType = new GraphQLObjectType({
 export let schema = new GraphQLSchema({
   query: queryType,
   mutation: mutationType,
-  subscription: subscriptionType
+  subscription: subscriptionType,
+  directives: [GraphQLDeferDirective]
 });

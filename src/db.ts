@@ -1,6 +1,43 @@
 import { User, SiteStatistics, Ticket, TodoItem, WorkingGroup } from './types';
 
-export let users: User[] = [
+const wait = (time: number) =>
+  new Promise((resolve) => setTimeout(resolve, time))
+
+class Database<T> {
+  constructor(private raw: T[], private delay = 500) {}
+
+  async push(item: T) {
+    await wait(this.delay)
+    this.raw.push(item);
+  }
+
+  async all(): Promise<T[]> {
+    await wait(this.delay)
+    return this.raw.slice();
+  }
+
+  async splice(start: number, deleteCount: number, ...items: T[]) {
+    await wait(this.delay)
+    this.raw.splice(start, deleteCount, ...items);
+  }
+
+  async find(condition: (item: T) => boolean): Promise<T | undefined> {
+    await wait(this.delay)
+    return this.raw.find(condition);
+  }
+
+  async findIndex(condition: (item: T) => boolean): Promise<number> {
+    await wait(this.delay)
+    return this.raw.findIndex(condition);
+  }
+
+  async filter(condition: (item: T) => boolean): Promise<T[]> {
+    await wait(this.delay)
+    return this.raw.filter(condition);
+  }
+}
+
+export let users: Database<User> = new Database([
   {
     type: 'User',
     id: 1,
@@ -25,9 +62,9 @@ export let users: User[] = [
     fullName: 'John Doe',
     avatarUrl: '/images/faces/face4.jpg'
   }
-];
+]);
 
-export let workingGroups: WorkingGroup[] = [
+export let workingGroups: Database<WorkingGroup> = new Database([
   {
     type: 'WorkingGroup',
     id: 1,
@@ -40,7 +77,7 @@ export let workingGroups: WorkingGroup[] = [
     name: 'Customer Support #2',
     memberIds: [3]
   }
-];
+]);
 
 export let siteStatistics: SiteStatistics = {
   type: 'SiteStatistics',
@@ -50,7 +87,7 @@ export let siteStatistics: SiteStatistics = {
   currentVisitorsOnline: 1523
 };
 
-export let tickets: Ticket[] = [
+export let tickets: Database<Ticket> = new Database([
   {
     type: 'Ticket',
     id: 1,
@@ -96,9 +133,9 @@ export let tickets: Ticket[] = [
     lastUpdated: new Date(2019, 9, 17).toJSON(),
     trackingId: 'WD-12349'
   }
-];
+]);
 
-export let todoItems: TodoItem[] = [
+export let todoItems: Database<TodoItem> = new Database([
   {
     type: 'TodoItem',
     id: 1,
@@ -117,7 +154,7 @@ export let todoItems: TodoItem[] = [
     text: 'Get a dog',
     completed: false
   }
-];
+]);
 
 export let data = {
   SiteStatistics: [siteStatistics],
