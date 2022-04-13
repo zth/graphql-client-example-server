@@ -11,7 +11,7 @@ import {
   GraphQLList
 } from 'graphql';
 
-import { GraphQLDateTime } from 'graphql-iso-date';
+import { DateTimeResolver } from 'graphql-scalars';
 
 import {
   fromGlobalId,
@@ -135,9 +135,9 @@ export let assigneeUnionType = new GraphQLUnionType({
   types: [userType, workingGroupType],
   resolveType(value) {
     if (value.type === 'User') {
-      return userType;
+      return 'User';
     } else if (value.type === 'WorkingGroup') {
-      return workingGroupType;
+      return 'WorkingGroup';
     }
   }
 });
@@ -191,7 +191,7 @@ export let ticketType: GraphQLObjectType = new GraphQLObjectType({
     status: { type: new GraphQLNonNull(ticketStatusEnum) },
     subject: { type: new GraphQLNonNull(GraphQLString) },
     lastUpdated: {
-      type: GraphQLDateTime,
+      type: DateTimeResolver,
       resolve: obj => (obj.lastUpdated ? new Date(obj.lastUpdated) : null)
     },
     trackingId: { type: new GraphQLNonNull(GraphQLString) }

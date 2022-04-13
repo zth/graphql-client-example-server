@@ -1,11 +1,13 @@
-import { ApolloServer } from 'apollo-server';
+import { createServer } from '@graphql-yoga/node';
 
 import { schema } from './schema';
 import { setupSubscriptionFeed } from './subscriptionFeed';
 
-let server = new ApolloServer({ schema });
+let server = createServer({
+  schema,
+  port: parseInt(process.env.PORT || '4000')
+});
 
-server.listen(process.env.PORT || 4000).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+server.start().then(() => {
   setupSubscriptionFeed();
 });
