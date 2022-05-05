@@ -2,7 +2,15 @@
 
 ## master
 
-...
+## 1.4.0
+
+- Bump dependencies
+- Move to GraphQL Yoga
+- Add @defer/stream support
+- Now every DB operation results in a delay, set to 500ms by default
+- Paginated and connection resolvers now return AsyncIterable on results and edges.
+
+Kudos to @XiNiHa who did the whole modernization!
 
 ## 1.2.0
 

@@ -1,6 +1,6 @@
 {
   "name": "graphql-client-example-server",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A simple GraphQL server for powering examples of various GraphQL clients in various languages.",
   "main": "bin/index.js",
   "repository": "https://github.com/zth/graphql-client-example-server",

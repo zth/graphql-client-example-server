@@ -43,9 +43,5 @@ yarn start
 - [x] Custom scalars
 - [x] Unions
 - [x] Subscriptions
-
-## Misc TODO
-
-- [ ] Tests?
-- [x] Autoexport generated .graphql schema file on commit
-- [x] Package and publish runnable artifact to NPM (https://github.com/zeit/ncc ?)
+- [x] Defer/stream
+- [x] Artifical delay's to emphasize defer/stream
