@@ -3,6 +3,8 @@ import relayDeferPlugin from 'envelop-plugin-relay-defer';
 
 import { schema } from './schema';
 import { setupSubscriptionFeed } from './subscriptionFeed';
+// @ts-ignore
+import pkgJson from '../package.json';
 
 let server = createServer({
   schema,
@@ -11,5 +13,8 @@ let server = createServer({
 });
 
 server.start().then(() => {
+  console.log(
+    `Running "graphql-client-example-server" version ${pkgJson.version}.`
+  );
   setupSubscriptionFeed();
 });

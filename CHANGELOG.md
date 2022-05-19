@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.5.0
+
+- Properly support Relay defer/stream.
+
 ## 1.4.0
 
 - Bump dependencies
