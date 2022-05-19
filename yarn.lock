@@ -174,6 +174,11 @@ dset@^3.1.1:
   resolved "https://registry.yarnpkg.com/dset/-/dset-3.1.1.tgz#07de5af7a8d03eab337ad1a8ba77fe17bba61a8c"
   integrity sha512-hYf+jZNNqJBD2GiMYb+5mqOIX4R4RRHXU3qWMWYN+rqcR2/YpRL2bUHr8C8fU+5DNvqYjJ8YvMGSLuVPWU1cNg==
 
+envelop-plugin-relay-defer@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/envelop-plugin-relay-defer/-/envelop-plugin-relay-defer-1.0.2.tgz#5d0bf07d55e5d9b994c0750da7d050d38cbbdccc"
+  integrity sha512-tp5Sk2CPL4KW/YViw6e1nxXb6g//3zApcrvSLl17D2/MxK7kurkPXgGvPIy+t8W4q/51D9QkrqubxOdIL/aJ/w==
+
 event-target-shim@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"

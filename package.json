@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@graphql-yoga/node": "^2.2.0",
+    "envelop-plugin-relay-defer": "^1.0.2",
     "graphql": "^16.3.0-canary.pr.2839.9c3b21ca34d760070b76424327061e6b4ad26f05",
     "graphql-relay": "^0.10.0",
     "graphql-scalars": "^1.17.0",
