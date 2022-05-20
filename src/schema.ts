@@ -5,6 +5,8 @@ import {
   GraphQLInt,
   GraphQLID,
   GraphQLList,
+  GraphQLIncludeDirective,
+  GraphQLSkipDirective,
   GraphQLDeferDirective,
   GraphQLStreamDirective
 } from 'graphql';
@@ -117,5 +119,10 @@ export let schema = new GraphQLSchema({
   query: queryType,
   mutation: mutationType,
   subscription: subscriptionType,
-  directives: [GraphQLDeferDirective, GraphQLStreamDirective]
+  directives: [
+    GraphQLIncludeDirective,
+    GraphQLSkipDirective,
+    GraphQLDeferDirective,
+    GraphQLStreamDirective
+  ]
 });
