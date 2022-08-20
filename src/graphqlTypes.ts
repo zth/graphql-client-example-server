@@ -40,20 +40,7 @@ export let { nodeInterface, nodeField } = nodeDefinitions(
     return null;
   },
   // @ts-ignore
-  (obj: { type: string }) => {
-    switch (obj.type) {
-      case 'User':
-        return userType;
-      case 'WorkingGroup':
-        return workingGroupType;
-      case 'SiteStatistics':
-        return siteStatisticsType;
-      case 'Ticket':
-        return ticketType;
-      case 'TodoItem':
-        return todoItemType;
-    }
-  }
+  (obj: { type: string }) => obj.type
 );
 
 const paginationDefinitions = (objectType: GraphQLObjectType, name: string) =>
