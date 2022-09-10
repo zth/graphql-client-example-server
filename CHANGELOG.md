@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.5.1
+
+- Add back `@include` and `@skip` directives.
+
 ## 1.5.0
 
 - Properly support Relay defer/stream.
