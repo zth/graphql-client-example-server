@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.5.2
+
+- Fix `node`.
+
 ## 1.5.1
 
 - Add back `@include` and `@skip` directives.
